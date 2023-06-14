@@ -1,31 +1,21 @@
-#Build (download paper)
-FROM amazoncorretto:17 AS build
-
+FROM amazoncorretto:17 AS running
 ARG version=1.19.4
 ARG build=550
-
-RUN apt-get update -y && apt-get install -y curl jq
-WORKDIR /opt/minecraft
-COPY ./getpaperserver.sh /
-RUN chmod +x /getpaperserver.sh
-RUN /getpaperserver.sh ${version} ${build}
-
-#Running
-FROM amazoncorretto:17 AS running
-
 ARG TARGETARCH
 ARG RCON_CLI_VER=1.6.0
 ARG MEMORY_SIZE=1G
 
-#install gosu
+#install gosu and curl
 RUN set -eux; \
  apt-get update; \
  apt-get install -y gosu; \
+ apt-get install -y curl; \
  rm -rf /var/lib/apt/lists/*; \
  gosu nobody true
 
-WORKDIR /data
-COPY --from=build /opt/minecraft/paper.jar /opt/minecraft/paperspigot.jar
+WORKDIR /opt/minecraft
+ENV PAPERMC_DOWNLOAD_URL="https://papermc.io/api/v2/projects/paper/versions/${version}/builds/${build}/downloads/paper-${version}-${build}.jar"
+RUN curl -s -o paper.jar ${PAPERMC_DOWNLOAD_URL}
 
 ADD https://github.com/itzg/rcon-cli/releases/download/${RCON_CLI_VER}/rcon-cli_${RCON_CLI_VER}_linux_${TARGETARCH}.tar.gz /tmp/rcon-cli.tgz
 RUN tar -x -C /usr/local/bin -f /tmp/rcon-cli.tgz rcon-cli && \
@@ -36,10 +26,14 @@ VOLUME "/data"
 EXPOSE 25565/tcp
 EXPOSE 25565/udp
 
-ENV MEMORYSIZE=$MEMORY_SIZE
-
 #aikar's java flags, see https://docs.papermc.io/paper/aikars-flags for more details
+ENV JAVAFLAGS = "-Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -Dcom.mojang.eula.agree=true"
 
+WORKDIR /data
+COPY /docker-entrypoint.sh /opt/minecraft
+RUN chmod +x /opt/minecraft/docker-entrypoint.sh
 
+# Entrypoint
+ENTRYPOINT ["/opt/minecraft/docker-entrypoint.sh"]
 
 
