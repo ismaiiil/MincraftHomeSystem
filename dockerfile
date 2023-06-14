@@ -1,9 +1,10 @@
-FROM amazoncorretto:17 AS running
+FROM amazoncorretto:17
 ARG version=1.19.4
 ARG build=550
 ARG TARGETARCH
 ARG RCON_CLI_VER=1.6.0
 ARG MEMORY_SIZE=1G
+ARG SKIP_PERM_CHECK=false
 
 #install gosu and curl
 RUN set -eux; \
