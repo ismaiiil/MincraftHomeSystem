@@ -1,10 +1,10 @@
-FROM amazoncorretto:17
+FROM eclipse-temurin:17.0.7_7-jre
 ARG version=1.19.4
 ARG build=550
 ARG TARGETARCH
 ARG RCON_CLI_VER=1.6.0
 ARG MEMORY_SIZE=1G
-ARG SKIP_PERM_CHECK=false
+ARG SKIP_PERM_CHECK="true"
 
 #install gosu and curl
 RUN set -eux; \
@@ -28,7 +28,7 @@ EXPOSE 25565/tcp
 EXPOSE 25565/udp
 
 #aikar's java flags, see https://docs.papermc.io/paper/aikars-flags for more details
-ENV JAVAFLAGS = "-Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -Dcom.mojang.eula.agree=true"
+ENV JAVAFLAGS="-Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -Dcom.mojang.eula.agree=true"
 
 WORKDIR /data
 COPY /docker-entrypoint.sh /opt/minecraft
