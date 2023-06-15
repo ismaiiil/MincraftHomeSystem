@@ -1,6 +1,6 @@
 name: HomeSystemPlugin
 version: 1.0.0
-main: com.ismail.homesystem.HomeSystemMain
+main: com.ismail.HomeSystemPlugin
 description: A simple homesystem
 author: Ismail Nassurally
 website: https://local.test

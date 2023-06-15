@@ -12,30 +12,13 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    implementation("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
     testImplementation(platform("org.junit:junit-bom:5.9.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
 }
-
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-    }
-}
-
-//JAR building
-tasks.named<ShadowJar>("shadowJar") {
-    group = "_homeSystemTasks"
-    manifest.attributes["Main-Class"] = "com.ismail.homesystem.HomeSystemMain" // Replace with your main class name
-    archiveFileName.set("HomeSystem.jar") // Replace with your desired JAR file name
-}
-
 
 java{
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
