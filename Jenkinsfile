@@ -28,7 +28,14 @@ pipeline {
             }
         }
 
-
+        stage('moveToDockerVOlume') {
+            steps {
+                script {
+                    // Copy the JAR file to the local /data/plugins folder
+                    sh 'cp $JENKINS_HOME/workspace/minecraft-plugin-ci/build/libs/HomeSystem.jar /docker_files/data/plugins/'
+                }
+            }
+        }
     }
 
 
