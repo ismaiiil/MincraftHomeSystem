@@ -21,7 +21,7 @@ pipeline {
             steps {
                 bat '''
                 mkdir .\\docker_files\\data\\plugins
-                copy .\\build\\libs\\HomeSystem.jar .\\docker_files\\data\\plugins\\
+                copy .\\home-system-spigot\\build\\libs\\HomeSystem.jar .\\docker_files\\data\\plugins\\
                 '''
             }
         }
