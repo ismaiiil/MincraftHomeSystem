@@ -1,0 +1,7 @@
+name: HomeSystemPlugin
+version: 1.0.0
+main: com.ismail.homesystem.HomeSystemMain
+description: An example plugin
+author: Ismail
+website: None
+api-version: '1.19.4'

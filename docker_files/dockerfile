@@ -4,7 +4,8 @@ ARG build=550
 ARG TARGETARCH
 ARG RCON_CLI_VER=1.6.0
 ARG MEMORY_SIZE=1G
-ARG SKIP_PERM_CHECK="true"
+ARG SKIP_PERM_CHECK="false"
+ENV JAVA_TOOL_OPTIONS "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 #install gosu and curl
 RUN set -eux; \
@@ -20,7 +21,7 @@ RUN curl -s -o paper.jar ${PAPERMC_DOWNLOAD_URL}
 
 ADD https://github.com/itzg/rcon-cli/releases/download/${RCON_CLI_VER}/rcon-cli_${RCON_CLI_VER}_linux_${TARGETARCH}.tar.gz /tmp/rcon-cli.tgz
 RUN tar -x -C /usr/local/bin -f /tmp/rcon-cli.tgz rcon-cli && \
-rm /tmp/rcon-cli.tgz
+ rm /tmp/rcon-cli.tgz
 
 VOLUME "/data"
 
@@ -31,7 +32,8 @@ EXPOSE 25565/udp
 ENV JAVAFLAGS="-Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -Dcom.mojang.eula.agree=true"
 
 WORKDIR /data
-COPY /docker-entrypoint.sh /opt/minecraft
+
+COPY docker-entrypoint.sh /opt/minecraft
 RUN chmod +x /opt/minecraft/docker-entrypoint.sh
 
 # Entrypoint

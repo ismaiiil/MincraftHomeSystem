@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
     container_name: "mcserver"
     environment:
       MEMORYSIZE: "1G"
@@ -12,6 +11,7 @@ services:
       - "./data:/data:rw"
     ports:
       - "25565:25565"
+      - "5005:5005"
     # The following allow `docker attach minecraft` to work
     stdin_open: true
     tty: true
