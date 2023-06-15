@@ -19,6 +19,7 @@ pipeline {
 
         stage('moveToDockerVOlume') {
             steps {
+                bat 'dir'
                 bat 'copy .\\build\\libs\\HomeSystem.jar .\\docker_files\\data\\plugins\\'
             }
         }
