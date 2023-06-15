@@ -30,15 +30,18 @@ pipeline {
             steps {
                 script {
                     // Check if Docker container is running
-                    def containerStatus = bat(returnStatus: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
+                    def containerStatus = bat(returnStdout: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
 
                     if (containerStatus.trim() == 'true') {
                         // Docker container is already running, stop it first
                         bat 'docker stop mcserver'
                     }
 
-                    // Start Docker container
-                    bat 'docker-compose up -d'
+                    // Change working directory to docker_files
+                    dir('docker_files') {
+                        // Start Docker container
+                        bat 'docker-compose up -d'
+                    }
 
                     // Perform health checks
                     def isContainerRunning = false
