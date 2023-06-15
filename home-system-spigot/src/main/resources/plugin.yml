@@ -1,6 +1,6 @@
 name: HomeSystemPlugin
 version: 1.0.0
-main: com.ismail.HomeSystemPlugin
+main: com.ismail.homesystem.spigot.HomeSystemPlugin
 description: A simple homesystem
 author: Ismail Nassurally
 website: https://local.test
