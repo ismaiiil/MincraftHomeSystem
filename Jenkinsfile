@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('BuildAndTest') {
             steps {
                 // Checkout your Git repository
                 git 'https://github.com/ismaiiil/MincraftHomeSystem'

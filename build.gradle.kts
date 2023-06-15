@@ -4,6 +4,7 @@ import org.gradle.process.internal.ExecException
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("idea")
 }
 
 group = "com.ismail"
@@ -15,7 +16,17 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    implementation("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    testImplementation(platform("org.junit:junit-bom:5.9.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 //JAR building
