@@ -17,10 +17,12 @@ pipeline {
             }
         }
 
-        stage('moveToDockerVOlume') {
+        stage('moveToDockerVolume') {
             steps {
-                bat 'dir'
-                bat 'copy .\\build\\libs\\HomeSystem.jar .\\docker_files\\data\\plugins\\'
+                bat '''
+                mkdir .\\docker_files\\data\\plugins
+                copy .\\build\\libs\\HomeSystem.jar .\\docker_files\\data\\plugins\\
+                '''
             }
         }
     }
