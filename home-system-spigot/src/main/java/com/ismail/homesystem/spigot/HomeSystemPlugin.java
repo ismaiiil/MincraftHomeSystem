@@ -1,5 +1,6 @@
 package com.ismail.homesystem.spigot;
 
+import com.ismail.homesystem.api.APIDummy;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
         Utils test;
+        APIDummy apitest;
     }
 
     @EventHandler
