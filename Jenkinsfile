@@ -32,8 +32,9 @@ pipeline {
                     // Check if Docker container is running
                     def containerStatus = bat(returnStdout: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
 
-                    if (containerStatus.trim() == 'true') {
+                    if (containerStatus.contains('true')) {
                         // Docker container is already running, stop it first
+                        echo 'docker is already running stopping'
                         bat 'docker stop mcserver'
                     }
 
@@ -43,23 +44,22 @@ pipeline {
                         bat 'docker-compose up -d'
                     }
 
-                    // Perform health checks
-                    def isContainerRunning = false
                     def maxRetries = 10
                     def retryCount = 0
 
-                    while (!isContainerRunning && retryCount < maxRetries) {
-                        try {
-                            bat 'docker inspect -f "{{.State.Running}}" mcserver'
-                            isContainerRunning = true
-                        } catch (Exception ex) {
+                    containerStatus = bat(returnStdout: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
+
+                    while (retryCount < maxRetries) {
+                        if(!containerStatus.contains('true')){
                             retryCount++
                             sleep(5) // Wait for 5 seconds before retrying
+                        }else{
+                            break;
                         }
                     }
 
                     // Verify container status
-                    if (isContainerRunning) {
+                    if (containerStatus.contains('true')) {
                         echo 'Docker container is running.'
                     } else {
                         error 'Failed to start Docker container.'
