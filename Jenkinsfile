@@ -6,11 +6,16 @@ pipeline {
             steps {
                 // Checkout your Git repository
                 git 'https://github.com/ismaiiil/MincraftHomeSystem'
-                sh 'chmod +x gradlew'
-                // Build the Gradle project
-                sh './gradlew clean build'
+                script {
+                    bat 'gradlew.bat clean build'
+//                     if (isUnix()) {
+//                             sh 'chmod +x gradlew'
+//                             sh './gradlew clean build'
+//                         } else {
+//
+//                         }
+//                     }
             }
         }
-
     }
 }
