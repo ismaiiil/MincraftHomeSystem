@@ -35,7 +35,7 @@ WORKDIR /data
 
 COPY /docker-entrypoint.sh /opt/minecraft/docker-entrypoint.sh
 RUN ls -a /opt/minecraft/
-RUN chmod +x /opt/minecraft/docker-entrypoint.sh
+RUN chmod 775 /opt/minecraft/docker-entrypoint.sh
 
 # Entrypoint
 ENTRYPOINT ["/opt/minecraft/docker-entrypoint.sh"]
