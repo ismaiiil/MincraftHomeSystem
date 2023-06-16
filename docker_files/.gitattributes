@@ -1,0 +1,2 @@
+#avoid git auto CRFL bug with .sh files cloned on a windows machine
+*.sh eol=lf
