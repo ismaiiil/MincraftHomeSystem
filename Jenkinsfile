@@ -34,7 +34,7 @@ pipeline {
 
                     try{
                         containerStatus = bat(returnStdout: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
-                    }catch{
+                    }catch(Exception e){
                         containerStatus = 'false'
                     }
 
