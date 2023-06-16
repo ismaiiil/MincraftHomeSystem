@@ -1,0 +1,8 @@
+  {
+      "databaseConfig": {
+        "databaseURL": "jdbc:mysql://localhost:3306/home_system_mapping?useSSL=false",
+        "user": "mcuser",
+        "password": "password"
+      }
+  }
+
