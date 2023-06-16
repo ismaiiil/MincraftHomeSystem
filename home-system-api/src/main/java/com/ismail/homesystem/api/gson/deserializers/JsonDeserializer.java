@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 
 public class JsonDeserializer {
-
     private DatabaseConfig databaseConfig;
-
     public JsonDeserializer(String jsonFilename) {
         String workingDirectory = new File("").getAbsolutePath();
-        try (FileReader reader = new FileReader(workingDirectory + FileSystems.getDefault().getSeparator() + jsonFilename)) {
+        String sep = FileSystems.getDefault().getSeparator();
+        String pluginsFolder =  sep + "plugins" + sep;
+        try (FileReader reader = new FileReader(workingDirectory + pluginsFolder + jsonFilename)) {
             Gson gson = new Gson();
             databaseConfig = gson.fromJson(reader, DatabaseConfig.class);
         }catch (IOException e){
