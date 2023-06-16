@@ -47,6 +47,7 @@ pipeline {
                     dir('docker_files') {
                         // Start Docker container
                         bat 'docker-compose up -d'
+                        bat 'dir'
                     }
 
                     def maxRetries = 10
