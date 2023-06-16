@@ -39,3 +39,4 @@ RUN chmod 775 /opt/minecraft/docker-entrypoint.sh
 
 # Entrypoint
 ENTRYPOINT ["/opt/minecraft/docker-entrypoint.sh"]
+#test
