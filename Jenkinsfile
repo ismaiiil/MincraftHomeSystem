@@ -29,8 +29,13 @@ pipeline {
         stage('runDocker') {
             steps {
                 script {
+                    def containerStatus;
                     // Check if Docker container is running
-                    def containerStatus = bat(returnStdout: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
+                    try{
+                        containerStatus = bat(returnStdout: true, script: 'docker inspect -f "{{.State.Running}}" mcserver')
+                    }catch(Exception e){
+                        containerStatus = 'false'
+                    }
 
                     if (containerStatus.contains('true')) {
                         // Docker container is already running, stop it first
