@@ -18,6 +18,9 @@ public class PlayerHouse {
         this.coordinates = coordinates;
     }
 
+    public PlayerHouse() {
+    }
+
     @Override
     public String toString() {
         return "PlayerHouse [id=" + id + ", playerId=" + playerId + ", coordinates=" + coordinates;

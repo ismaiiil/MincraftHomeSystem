@@ -12,6 +12,7 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
 public class HibernateInitializer {
+    public static String CONFIG_PATH = "config.json";
     private static SessionFactory sessionFactory;
     public static SessionFactory getHibernate() {
         if (sessionFactory == null) {
@@ -38,7 +39,7 @@ public class HibernateInitializer {
 
     private static void initializeConfig(Configuration configuration) {
         Properties settings = new Properties();
-        DatabaseConfig databaseConfig = new JsonDeserializer("config.json").getDatabaseConfig();
+        DatabaseConfig databaseConfig = new JsonDeserializer(CONFIG_PATH).getDatabaseConfig();
         settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         settings.put(Environment.URL, databaseConfig.getDatabaseURL());
         settings.put(Environment.USER, databaseConfig.getUser());

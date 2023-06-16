@@ -22,6 +22,7 @@ pipeline {
                 bat '''
                 mkdir .\\docker_files\\data\\plugins
                 copy .\\home-system-spigot\\build\\libs\\HomeSystem.jar .\\docker_files\\data\\plugins\\
+                copy .\\home-system-api\\configurations\\config.json .\\docker_files\\data\\plugins\\
                 '''
             }
         }
