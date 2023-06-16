@@ -15,20 +15,3 @@ services:
     # The following allow `docker attach minecraft` to work
     stdin_open: true
     tty: true
-#    depends_on:
-#      db:
-#        condition: service_healthy
-#  db:
-#    container_name: mcdatabase
-#    image: mysql:8.0.33
-#    ports:
-#      - "3306"
-#    environment:
-#      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-#      MYSQL_USER: "mcuser"
-#      MYSQL_PASSWORD: "password"
-#      MYSQL_DATABASE: "home_system_mapping"
-#    healthcheck:
-#      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-#      timeout: 20s
-#      retries: 10
