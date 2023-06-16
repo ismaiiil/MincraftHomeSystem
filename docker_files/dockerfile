@@ -33,7 +33,8 @@ ENV JAVAFLAGS="-Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -XX:+UseG1GC -XX:+ParallelR
 
 WORKDIR /data
 
-COPY docker-entrypoint.sh /opt/minecraft
+#COPY docker-entrypoint.sh /opt/minecraft
+COPY ./docker-entrypoint.sh /opt/minecraft/docker-entrypoint.sh
 RUN ls -a /opt/minecraft/
 RUN chmod +x /opt/minecraft/docker-entrypoint.sh
 

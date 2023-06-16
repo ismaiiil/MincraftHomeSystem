@@ -46,7 +46,7 @@ pipeline {
                     // Change working directory to docker_files
                     dir('docker_files') {
                         // Start Docker container
-                        bat 'docker-compose up -d'
+                        bat 'docker-compose up -d --privileged'
                         bat 'dir'
                     }
 
