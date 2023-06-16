@@ -3,5 +3,5 @@ package com.ismail.homesystem.common;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Utils {
-    String UtilDummy = "UTIL";
+    public String UtilDummy = "UTIL";
 }

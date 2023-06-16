@@ -18,7 +18,10 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
         Utils test;
-        APIDummy apitest;
+        test = new Utils();
+        System.out.println(test.UtilDummy);
+        APIDummy apitest = new APIDummy();
+        System.out.println(apitest.APIString);
     }
 
     @EventHandler

@@ -1,3 +1,5 @@
+@file:Suppress("VulnerableLibrariesLocal")
+
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
@@ -15,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
     testImplementation(platform("org.junit:junit-bom:5.9.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":home-system-common"))
@@ -27,8 +29,6 @@ tasks.named<ShadowJar>("shadowJar") {
     group = "_homeSystemTasks"
     manifest.attributes["Main-Class"] = "com.ismail.homesystem.spigot.HomeSystemPlugin" // Replace with your main class name
     archiveFileName.set("HomeSystem.jar") // Replace with your desired JAR file name
-
-    minimize()
 }
 
 tasks.test {
