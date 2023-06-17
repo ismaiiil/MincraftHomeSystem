@@ -24,7 +24,7 @@ public class JsonDeserializer {
         try{
             Gson gson = new Gson();
             String fileContents = Files.readString(Paths.get(workingDirectory + pluginsFolder + jsonFilename), StandardCharsets.UTF_8);
-            fileContents = StringUtils.removeLineEndings(fileContents);
+//            fileContents = StringUtils.removeLineEndings(fileContents);
             configWrapper = gson.fromJson(fileContents, ConfigWrapper.class);
 
         }catch (IOException e){

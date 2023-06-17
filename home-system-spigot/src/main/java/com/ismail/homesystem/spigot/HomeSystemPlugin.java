@@ -34,11 +34,17 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.getPlayer().sendMessage(Component.text("Hello, " + event.getPlayer().getName() + "!"));
-        PlayerHouse playerHouse = new PlayerHouse(event.getPlayer().getName(),event.getPlayer().getLocation().toString());
-        playerHouseDAO.savePlayerHouse(playerHouse);
+        var playerBlock = event.getPlayer().getLocation().getBlock();
 
+        PlayerHouse playerHouse = new PlayerHouse(event.getPlayer().getName(),
+                "x:"+ playerBlock.getX() +
+                          "y:"+ playerBlock.getY() +
+                          "z:"+ playerBlock.getZ()
+                );
+
+        playerHouseDAO.savePlayerHouse(playerHouse);
         List< PlayerHouse > playerHouses = playerHouseDAO.getPlayerHouses();
-        playerHouses.forEach(s -> System.out.println(s.getPlayerId()));
+        playerHouses.forEach(s -> System.out.println(s.getPlayerId() + s.getCoordinates()));
     }
 
 }

@@ -1,6 +1,6 @@
   {
       "databaseConfig": {
-        "databaseURL": "jdbc:mysql://localhost:3306/home_system_mapping?useSSL=false&allowPublicKeyRetrieval=true",
+        "databaseURL": "jdbc:mysql://mcdatabase:3306/home_system_mapping?useSSL=false&allowPublicKeyRetrieval=true",
         "user": "mcuser",
         "password": "password"
       }
