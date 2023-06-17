@@ -2,6 +2,7 @@
       "databaseConfig": {
         "databaseURL": "jdbc:mysql://mcdatabase:3306/home_system_mapping?useSSL=false&allowPublicKeyRetrieval=true",
         "user": "mcuser",
-        "password": "password"
+        "password": "password",
+        "ddlMode": "create-drop"
       }
   }

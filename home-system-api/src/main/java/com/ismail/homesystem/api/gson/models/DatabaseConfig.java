@@ -5,9 +5,10 @@ public class DatabaseConfig {
     private String user;
     private String password;
 
+    private String ddlMode;
+
     public DatabaseConfig() {
     }
-
 
     public String getDatabaseURL() {
         return databaseURL;
@@ -31,5 +32,13 @@ public class DatabaseConfig {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDdlMode() {
+        return ddlMode;
+    }
+
+    public void setDdlMode(String ddlMode) {
+        this.ddlMode = ddlMode;
     }
 }
