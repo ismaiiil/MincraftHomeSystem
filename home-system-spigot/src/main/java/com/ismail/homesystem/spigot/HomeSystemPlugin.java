@@ -46,12 +46,13 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
             }
         });
 
-        //TODO fix database error with table existing, close sessions?
         //TODO Add commands with Command API
         //TODO /sethome <name> get current player position and push to database
         //TODO /delhome <name> get the line from db and delete the line
         //TODO /home <name> teleport to specific home
         //TODO /listhomes list all homes in the chat (maybe do pagination as well?)
+
+        //TODO move json parsing in common module
 
         //TODO commands optimisation
         //TODO need to add help for commands
