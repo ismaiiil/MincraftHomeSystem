@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.UUID;
 import java.util.logging.Logger;
 
 
@@ -28,6 +30,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         PlayerHouseDAO playerHouseDAO = new PlayerHouseDAO();
         event.getPlayer().sendMessage(Component.text("Plugin House System Initialised"));
         final var playerBlock = event.getPlayer().getLocation().getBlock();
+        String houseName =  UUID.randomUUID().toString().substring(0, 8);
         final PlayerHouse playerHouse = new PlayerHouse("test", event.getPlayer().getUniqueId().toString(),
                 "x:"+ playerBlock.getX() +
                           "y:"+ playerBlock.getY() +
@@ -39,7 +42,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         });
         playerHouseDAO.getPlayerHouses().thenAccept((playerHouses)->{
             for (PlayerHouse house : playerHouses) {
-                System.out.println(house);
+                logger.info(house.toString());
             }
         });
 
