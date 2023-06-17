@@ -33,9 +33,6 @@ dependencies {
 //
 //}
 
-tasks.build{
-    dependsOn(shadow)
-}
 tasks {
     named<ShadowJar>("shadowJar") {
         group = "_homeSystemTasks"
