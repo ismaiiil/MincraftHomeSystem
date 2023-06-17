@@ -21,7 +21,9 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
         if (!HibernateManager.initHibernate()){
-            logger.severe("Database could not be initialised");
+            logger.severe("Hibernate database could not be initialised");
+        }else{
+            logger.info("Hibernate database initialised");
         }
     }
 
@@ -56,7 +58,6 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
 
         //TODO commands optimisation
         //TODO need to add help for commands
-        //TODO move db init in proper place (ie in plugin init not on player join)
     }
 
     @Override

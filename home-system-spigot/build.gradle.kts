@@ -25,24 +25,36 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-shade:9.0.3");
 }
 
+//tasks.named<ShadowJar>("shadowJar") {
+//    group = "_homeSystemTasks"
+//    archiveFileName.set("HomeSystem.jar") // Replace with your desired JAR file name
+//    manifest.attributes["Main-Class"] = "com.ismail.homesystem.spigot.HomeSystemPlugin" // Replace with your main class name
+//    relocate("dev.jorel.commandapi", "com.ismail.homesystem.libs.commandapi")
+//
+//}
+
+tasks.build{
+    dependsOn(shadow)
+}
 tasks {
     named<ShadowJar>("shadowJar") {
         group = "_homeSystemTasks"
 
         archiveFileName.set("HomeSystem.jar")
-        mergeServiceFiles()
         manifest {
             attributes(mapOf("Main-Class" to "com.ismail.homesystem.spigot.HomeSystemPlugin"))
         }
-        relocate("dev.jorel.commandapi", "com.ismail.homesystem.libs.commandapi")
+
         relocate("org.hibernate", "com.ismail.homesystem.libs.hibernate")
+        relocate("dev.jorel.commandapi", "com.ismail.homesystem.libs.commandapi")
 
         relocate("org.jboss", "com.ismail.homesystem.libsjboss")
         relocate("org.antlr", "com.ismail.homesystem.libs.antlr")
         relocate("org.glassfish", "com.ismail.homesystem.libs.glassfish")
+        relocate("org.eclipse", "com.ismail.homesystem.libs.eclipse")
         relocate("jakarta", "com.ismail.homesystem.libs.jakarta")
 
-        relocate("com.google.gson", "com.ismail.homesystem.libs.google.gson")
+        relocate("com.google", "com.ismail.homesystem.libs.google")
         relocate("google.protobuf", "com.ismail.homesystem.libs.google.protobuf")
 
         relocate("net.bytebuddy", "com.ismail.homesystem.libs.bytebuddy")
@@ -50,12 +62,6 @@ tasks {
         relocate("com.mysql", "com.ismail.homesystem.libs.mysql")
         relocate("com.fasterxml", "com.ismail.homesystem.libs.fasterxml")
         relocate("com.sun", "com.ismail.homesystem.libs.sun")
-
-        minimize()
-    }
-
-    build {
-        dependsOn(shadowJar)
     }
 }
 
