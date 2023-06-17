@@ -15,6 +15,7 @@ dependencies {
     implementation("org.hibernate:hibernate-core:6.2.5.Final")
     implementation("com.mysql:mysql-connector-j:8.0.33")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation(project(":home-system-common"))
 }
 
 tasks.test {

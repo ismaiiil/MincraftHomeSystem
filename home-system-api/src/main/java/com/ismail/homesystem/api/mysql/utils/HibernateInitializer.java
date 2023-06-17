@@ -39,7 +39,7 @@ public class HibernateInitializer {
 
     private static void initializeConfig(Configuration configuration) {
         Properties settings = new Properties();
-        DatabaseConfig databaseConfig = new JsonDeserializer(CONFIG_PATH).getDatabaseConfig();
+        DatabaseConfig databaseConfig = new JsonDeserializer(CONFIG_PATH).getConfigWrapper().getDatabaseConfig();
         settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         settings.put(Environment.URL, databaseConfig.getDatabaseURL());
         settings.put(Environment.USER, databaseConfig.getUser());
