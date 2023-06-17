@@ -1,7 +1,7 @@
 package com.ismail.homesystem.api.mysql.daos;
 
 import com.ismail.homesystem.api.mysql.models.PlayerHouse;
-import com.ismail.homesystem.api.mysql.utils.HibernateInitializer;
+import com.ismail.homesystem.api.mysql.utils.HibernateManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -13,7 +13,7 @@ public class PlayerHouseDAO {
     public CompletableFuture<Void> savePlayerHouse(PlayerHouse playerHouse) {
         return CompletableFuture.runAsync(() -> {
             Transaction transaction = null;
-            try (Session session = HibernateInitializer.getHibernate().openSession()) {
+            try (Session session = HibernateManager.getHibernate().openSession()) {
                 // start a transaction
                 transaction = session.beginTransaction();
                 // save the object
@@ -31,7 +31,7 @@ public class PlayerHouseDAO {
 
     public CompletableFuture<List<PlayerHouse>> getPlayerHouses() {
         return CompletableFuture.supplyAsync(() -> {
-            try (Session session = HibernateInitializer.getHibernate().openSession()) {
+            try (Session session = HibernateManager.getHibernate().openSession()) {
                 return session.createQuery("from PlayerHouse", PlayerHouse.class).list();
             } catch (Exception e) {
                 throw new RuntimeException("Failed to retrieve PlayerHouses", e);

@@ -11,7 +11,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-public class HibernateInitializer {
+public class HibernateManager {
     public static String CONFIG_PATH = "config.json";
     private static SessionFactory sessionFactory;
     public static SessionFactory getHibernate() {
@@ -29,6 +29,10 @@ public class HibernateInitializer {
             }
         }
         return sessionFactory;
+    }
+
+    public static void closeAllSessions(){
+        sessionFactory.close();
     }
 
     private static void buildConfiguration(Configuration configuration) {

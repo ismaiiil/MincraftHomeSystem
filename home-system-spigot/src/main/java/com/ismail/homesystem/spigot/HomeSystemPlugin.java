@@ -3,6 +3,7 @@ package com.ismail.homesystem.spigot;
 import com.ismail.homesystem.api.APIDummy;
 import com.ismail.homesystem.api.mysql.daos.PlayerHouseDAO;
 import com.ismail.homesystem.api.mysql.models.PlayerHouse;
+import com.ismail.homesystem.api.mysql.utils.HibernateManager;
 import com.ismail.homesystem.common.multithreading.BackgroundTaskRunner;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -55,9 +56,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
             }
         });
 
-
-
-        //TODO Optimise initialisation and database creation to fix "hanging", need to run in another thread
+        //TODO fix database error with table existing, close sessions?
         //TODO Add commands with Command API
         //TODO /sethome <name> get current player position and push to database
         //TODO /delhome <name> get the line from db and delete the line
@@ -69,4 +68,8 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         //TODO move db init in proper place (ie in plugin init not on player join)
     }
 
+    @Override
+    public void onDisable() {
+        HibernateManager.closeAllSessions();
+    }
 }
