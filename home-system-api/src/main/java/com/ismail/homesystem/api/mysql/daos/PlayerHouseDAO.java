@@ -6,28 +6,36 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerHouseDAO {
-    public void savePlayerHouse(PlayerHouse playerHouse) {
-        Transaction transaction = null;
-        try (Session session = HibernateInitializer.getHibernate().openSession()) {
-            // start a transaction
-            transaction = session.beginTransaction();
-            //save the object
-            session.persist(playerHouse);
-            // commit transaction
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+
+    public CompletableFuture<Void> savePlayerHouse(PlayerHouse playerHouse) {
+        return CompletableFuture.runAsync(() -> {
+            Transaction transaction = null;
+            try (Session session = HibernateInitializer.getHibernate().openSession()) {
+                // start a transaction
+                transaction = session.beginTransaction();
+                // save the object
+                session.persist(playerHouse);
+                // commit transaction
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                throw new RuntimeException("Failed to save PlayerHouse", e);
             }
-            e.printStackTrace();
-        }
+        });
     }
 
-    public List< PlayerHouse > getPlayerHouses() {
-        try (Session session = HibernateInitializer.getHibernate().openSession()) {
-            return session.createQuery("from PlayerHouse", PlayerHouse.class).list();
-        }
+    public CompletableFuture<List<PlayerHouse>> getPlayerHouses() {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Session session = HibernateInitializer.getHibernate().openSession()) {
+                return session.createQuery("from PlayerHouse", PlayerHouse.class).list();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to retrieve PlayerHouses", e);
+            }
+        });
     }
 }
