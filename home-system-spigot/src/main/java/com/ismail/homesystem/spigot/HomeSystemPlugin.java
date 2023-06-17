@@ -31,7 +31,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         event.getPlayer().sendMessage(Component.text("Plugin House System Initialised"));
         final var playerBlock = event.getPlayer().getLocation().getBlock();
         String houseName =  UUID.randomUUID().toString().substring(0, 8);
-        final PlayerHouse playerHouse = new PlayerHouse("test", event.getPlayer().getUniqueId().toString(),
+        final PlayerHouse playerHouse = new PlayerHouse(houseName, event.getPlayer().getUniqueId().toString(),
                 "x:"+ playerBlock.getX() +
                           "y:"+ playerBlock.getY() +
                           "z:"+ playerBlock.getZ()
