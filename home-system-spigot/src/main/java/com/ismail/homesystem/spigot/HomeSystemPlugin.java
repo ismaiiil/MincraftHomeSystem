@@ -66,7 +66,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
 
         //TODO commands optimisation
         //TODO need to add help for commands
-        //TODO
+        //TODO move db init in proper place (ie in plugin init not on player join)
     }
 
 }
