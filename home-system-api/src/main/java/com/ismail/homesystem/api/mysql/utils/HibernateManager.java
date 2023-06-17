@@ -1,5 +1,7 @@
 package com.ismail.homesystem.api.mysql.utils;
 
+
+import java.util.Objects;
 import java.util.Properties;
 
 import com.ismail.homesystem.api.gson.deserializers.JsonDeserializer;
@@ -10,6 +12,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
+
+
 
 public class HibernateManager {
     public static String CONFIG_PATH = "config.json";
@@ -29,6 +33,10 @@ public class HibernateManager {
             }
         }
         return sessionFactory;
+    }
+
+    public static boolean initHibernate(){
+        return !Objects.isNull(getHibernate());
     }
 
     public static void closeAllSessions(){
@@ -54,4 +62,8 @@ public class HibernateManager {
         configuration.setProperties(settings);
     }
 
+
+
 }
+
+

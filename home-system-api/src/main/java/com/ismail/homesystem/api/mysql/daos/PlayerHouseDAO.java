@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class PlayerHouseDAO {
-
     public CompletableFuture<Void> savePlayerHouse(PlayerHouse playerHouse) {
         return CompletableFuture.runAsync(() -> {
             Transaction transaction = null;
