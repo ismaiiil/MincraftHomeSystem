@@ -36,7 +36,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         event.getPlayer().sendMessage(Component.text("Hello, " + event.getPlayer().getName() + "!"));
         var playerBlock = event.getPlayer().getLocation().getBlock();
 
-        PlayerHouse playerHouse = new PlayerHouse(event.getPlayer().getName(),
+        PlayerHouse playerHouse = new PlayerHouse("test", event.getPlayer().getUniqueId().toString(),
                 "x:"+ playerBlock.getX() +
                           "y:"+ playerBlock.getY() +
                           "z:"+ playerBlock.getZ()
@@ -44,7 +44,19 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
 
         playerHouseDAO.savePlayerHouse(playerHouse);
         List< PlayerHouse > playerHouses = playerHouseDAO.getPlayerHouses();
-        playerHouses.forEach(s -> System.out.println(s.getPlayerId() + s.getCoordinates()));
+        playerHouses.forEach(s -> System.out.println(s.getPlayerUUID() + s.getCoordinates()));
+
+        //TODO Add "Name" to homes database
+        //TODO Optimise initialisation and database creation to fix "hanging", need to run in another thread
+        //TODO Add commands with Command API
+        //TODO /sethome <name> get current player position and push to database
+        //TODO /delhome <name> get the line from db and delete the line
+        //TODO /home <name> teleport to specific home
+        //TODO /listhomes list all homes in the chat (maybe do pagination as well?)
+
+        //TODO commands optimisation
+        //TODO need to add help for commands
+        //TODO
     }
 
 }
