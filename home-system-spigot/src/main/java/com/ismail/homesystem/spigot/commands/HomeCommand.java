@@ -34,7 +34,7 @@ public class HomeCommand {
         playerHouseDAO.savePlayerHouse(playerHouse).thenRun(()->{
             player.sendPlainMessage("Your home location has been saved");
         }).exceptionally(throwable -> {
-            ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable);
+            ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
             if (errorCode == ErrorCodes.CONSTRAINT_VIOLATION) {
                 player.sendPlainMessage("Could not create home, you already have a home named: " + name);
             } else if (errorCode == ErrorCodes.UNKNOWN_ERROR) {

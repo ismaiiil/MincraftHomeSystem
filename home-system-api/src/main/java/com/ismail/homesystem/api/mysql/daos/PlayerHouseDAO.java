@@ -5,6 +5,7 @@ import com.ismail.homesystem.api.mysql.utils.ErrorCodes;
 import com.ismail.homesystem.api.mysql.utils.HibernateManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
@@ -21,13 +22,11 @@ public class PlayerHouseDAO {
                 session.persist(playerHouse);
                 // commit transaction
                 transaction.commit();
-            } catch (Exception e) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-                if (e instanceof ConstraintViolationException) {
-                    throw new RuntimeException(ErrorCodes.UNKNOWN_ERROR.name(), e);
-                }
+            } catch (ConstraintViolationException e) {
+                rollback(transaction);
+                throw new RuntimeException(ErrorCodes.CONSTRAINT_VIOLATION.name());
+            }catch (Exception e){
+                rollback(transaction);
                 throw new RuntimeException(ErrorCodes.UNKNOWN_ERROR.name(), e);
             }
         });
@@ -41,5 +40,10 @@ public class PlayerHouseDAO {
                 throw new RuntimeException("Failed to retrieve PlayerHouses", e);
             }
         });
+    }
+    private void rollback(Transaction transaction){
+        if (transaction != null) {
+            transaction.rollback();
+        }
     }
 }

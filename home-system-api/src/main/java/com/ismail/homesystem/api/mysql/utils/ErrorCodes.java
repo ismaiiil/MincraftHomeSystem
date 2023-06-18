@@ -7,10 +7,11 @@ public enum ErrorCodes {
     UNKNOWN_ERROR(),
     CONSTRAINT_VIOLATION();
 
-    public static ErrorCodes getErrorCode(Object exception) {
-        if (exception instanceof ConstraintViolationException) {
-            return CONSTRAINT_VIOLATION;
+    public static ErrorCodes getErrorCode(String errorString) {
+        try {
+            return ErrorCodes.valueOf(errorString);
+        } catch (IllegalArgumentException e) {
+            return UNKNOWN_ERROR;
         }
-        return UNKNOWN_ERROR; // Default error code if no matching exception type is found
     }
 }
