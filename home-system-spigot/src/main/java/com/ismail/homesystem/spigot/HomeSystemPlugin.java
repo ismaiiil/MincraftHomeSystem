@@ -2,6 +2,9 @@ package com.ismail.homesystem.spigot;
 import com.ismail.homesystem.api.mysql.daos.PlayerHouseDAO;
 import com.ismail.homesystem.api.mysql.models.PlayerHouse;
 import com.ismail.homesystem.api.mysql.utils.HibernateManager;
+import com.ismail.homesystem.spigot.commands.HomeCommand;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -17,14 +20,24 @@ import java.util.logging.Logger;
 // then press Enter. You can now see whitespace characters in your code.
 public class HomeSystemPlugin extends JavaPlugin implements Listener {
     Logger logger = getLogger();
+
+    @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+    }
+
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
+        CommandAPI.onEnable();
+
         if (!HibernateManager.initHibernate()){
             logger.severe("Hibernate database could not be initialised");
         }else{
             logger.info("Hibernate database initialised");
         }
+
+        CommandAPI.registerCommand(HomeCommand.class);
     }
 
     @EventHandler
@@ -62,6 +75,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        CommandAPI.onDisable();
         HibernateManager.closeAllSessions();
     }
 }

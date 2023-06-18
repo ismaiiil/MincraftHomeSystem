@@ -23,6 +23,8 @@ dependencies {
     implementation(project(":home-system-common"))
     implementation(project(":home-system-api"))
     implementation("dev.jorel:commandapi-bukkit-shade:9.0.3");
+    compileOnly("dev.jorel:commandapi-annotations:9.0.3")
+    annotationProcessor("dev.jorel:commandapi-annotations:9.0.3")
 }
 
 //tasks.named<ShadowJar>("shadowJar") {
