@@ -1,9 +1,11 @@
 package com.ismail.homesystem.api.mysql.daos;
 
 import com.ismail.homesystem.api.mysql.models.PlayerHouse;
+import com.ismail.homesystem.api.mysql.utils.ErrorCodes;
 import com.ismail.homesystem.api.mysql.utils.HibernateManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -23,7 +25,10 @@ public class PlayerHouseDAO {
                 if (transaction != null) {
                     transaction.rollback();
                 }
-                throw new RuntimeException("Failed to save PlayerHouse", e);
+                if (e instanceof ConstraintViolationException) {
+                    throw new RuntimeException(ErrorCodes.UNKNOWN_ERROR.name(), e);
+                }
+                throw new RuntimeException(ErrorCodes.UNKNOWN_ERROR.name(), e);
             }
         });
     }

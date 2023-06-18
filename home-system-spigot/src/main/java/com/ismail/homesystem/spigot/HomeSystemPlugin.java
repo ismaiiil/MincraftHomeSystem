@@ -61,7 +61,6 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
             }
         });
 
-        //TODO Add commands with Command API
         //TODO /sethome <name> get current player position and push to database
         //TODO /delhome <name> get the line from db and delete the line
         //TODO /home <name> teleport to specific home
