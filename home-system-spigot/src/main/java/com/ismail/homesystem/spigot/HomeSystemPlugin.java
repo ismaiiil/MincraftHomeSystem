@@ -1,8 +1,7 @@
 package com.ismail.homesystem.spigot;
-import com.ismail.homesystem.api.mysql.daos.PlayerHouseDAO;
-import com.ismail.homesystem.api.mysql.models.PlayerHouse;
 import com.ismail.homesystem.api.mysql.utils.HibernateManager;
 import com.ismail.homesystem.spigot.commands.HomeCommand;
+import com.ismail.homesystem.spigot.menu.InventoryMenuListener;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import net.kyori.adventure.text.Component;
@@ -12,12 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
 import java.util.logging.Logger;
 
-
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
 public class HomeSystemPlugin extends JavaPlugin implements Listener {
     Logger logger = getLogger();
 
@@ -30,6 +25,8 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
         CommandAPI.onEnable();
+
+        Bukkit.getPluginManager().registerEvents(new InventoryMenuListener(), this);
 
         if (!HibernateManager.initHibernate()){
             logger.severe("Hibernate database could not be initialised");
@@ -44,15 +41,10 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.getPlayer().sendMessage(Component.text("Plugin House System Initialised"));
 
-        //TODO /sethome <name> get current player position and push to database
-        //TODO /delhome <name> get the line from db and delete the line
-        //TODO /home <name> teleport to specific home
-        //TODO /listhomes list all homes in the chat (maybe do pagination as well?)
-
         //TODO move json parsing in common module
-
         //TODO commands optimisation
-        //TODO need to add help for commands
+        //TODO localisation of texts
+        //TODO permissions?
     }
 
     @Override

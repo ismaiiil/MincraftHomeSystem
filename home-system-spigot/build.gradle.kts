@@ -14,6 +14,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.codemc.org/repository/maven-public")
 }
 
 dependencies {
@@ -25,15 +26,9 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-shade:9.0.3");
     compileOnly("dev.jorel:commandapi-annotations:9.0.3")
     annotationProcessor("dev.jorel:commandapi-annotations:9.0.3")
+//    implementation("de.tr7zw:item-nbt-api:2.11.2");
 }
 
-//tasks.named<ShadowJar>("shadowJar") {
-//    group = "_homeSystemTasks"
-//    archiveFileName.set("HomeSystem.jar") // Replace with your desired JAR file name
-//    manifest.attributes["Main-Class"] = "com.ismail.homesystem.spigot.HomeSystemPlugin" // Replace with your main class name
-//    relocate("dev.jorel.commandapi", "com.ismail.homesystem.libs.commandapi")
-//
-//}
 
 tasks {
     named<ShadowJar>("shadowJar") {
@@ -61,6 +56,9 @@ tasks {
         relocate("com.mysql", "com.ismail.homesystem.libs.mysql")
         relocate("com.fasterxml", "com.ismail.homesystem.libs.fasterxml")
         relocate("com.sun", "com.ismail.homesystem.libs.sun")
+
+//        relocate("de.tr7zw.changeme.nbtapi", "com.ismail.homesystem.libs.nbtapi")
+//        relocate("de.tr7zw.annotations", "com.ismail.homesystem.libs.annotations")
     }
 }
 

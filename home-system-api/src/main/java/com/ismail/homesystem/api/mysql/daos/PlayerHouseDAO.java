@@ -28,19 +28,30 @@ public class PlayerHouseDAO {
             } catch (ConstraintViolationException e) {
                 rollback(transaction);
                 throw new RuntimeException(ErrorCodes.CONSTRAINT_VIOLATION.name());
-            }catch (Exception e){
+            } catch (Exception e) {
                 rollback(transaction);
                 throw new RuntimeException(ErrorCodes.UNHANDLED_ERROR.name(), e);
             }
         });
     }
 
-    public CompletableFuture<List<PlayerHouse>> getPlayerHouses() {
+    public CompletableFuture<List<PlayerHouse>> getPlayerHouses(UUID playerUUID, boolean andIsDelete) {
         return CompletableFuture.supplyAsync(() -> {
+            Transaction transaction = null;
             try (Session session = HibernateManager.getHibernate().openSession()) {
-                return session.createQuery("from PlayerHouse", PlayerHouse.class).list();
+                Query<PlayerHouse> query = session.createQuery("from PlayerHouse where playerUUID = :playerId", PlayerHouse.class);
+                query.setParameter("playerId", playerUUID);
+                var houseList = query.list();
+                if (andIsDelete && houseList.size() > 0) {
+                    transaction = session.beginTransaction();
+                    for (var playerHouse: houseList) {
+                        session.remove(playerHouse);
+                    }
+                    transaction.commit();
+                }
+                return houseList;
             } catch (Exception e) {
-                throw new RuntimeException("Failed to retrieve PlayerHouses", e);
+                throw new RuntimeException(ErrorCodes.UNHANDLED_ERROR.name(), e);
             }
         });
     }
@@ -54,29 +65,30 @@ public class PlayerHouseDAO {
                 query.setParameter("homeName", homeName);
                 query.setParameter("playerId", playerUUID);
                 PlayerHouse playerHouse = query.uniqueResult();
-                if (playerHouse == null){
+                if (playerHouse == null) {
                     throw new EntityNotFoundException("PlayerHouse not found" + playerUUID + " " + homeName);
                 }
-                if (andIsDelete){
+                if (andIsDelete) {
                     transaction = session.beginTransaction();
                     session.remove(playerHouse);
                     transaction.commit();
                 }
                 return playerHouse;
-            }catch(EntityNotFoundException | ObjectNotFoundException e){
-                if (andIsDelete){
+            } catch (EntityNotFoundException | ObjectNotFoundException e) {
+                if (andIsDelete) {
                     rollback(transaction);
                 }
                 throw new RuntimeException(ErrorCodes.NOT_FOUND.name(), e);
-            }catch (Exception e) {
-                if (andIsDelete){
+            } catch (Exception e) {
+                if (andIsDelete) {
                     rollback(transaction);
                 }
                 throw new RuntimeException(ErrorCodes.UNHANDLED_ERROR.name(), e);
             }
         });
     }
-    private void rollback(Transaction transaction){
+
+    private void rollback(Transaction transaction) {
         if (transaction != null) {
             transaction.rollback();
         }

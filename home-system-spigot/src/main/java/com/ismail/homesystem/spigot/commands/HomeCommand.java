@@ -5,6 +5,7 @@ import com.ismail.homesystem.api.mysql.models.PlayerHouse;
 import com.ismail.homesystem.api.mysql.utils.ErrorCodes;
 import com.ismail.homesystem.common.StringUtils;
 import com.ismail.homesystem.spigot.HomeSystemPlugin;
+import com.ismail.homesystem.spigot.menu.InventoryMenu;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Subcommand;
@@ -24,6 +25,7 @@ import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 
 @Command("home")
 public class HomeCommand {
+    public static final int MAX_HOMES = 45;
     static Logger logger = getLogger();
     @Default
     public static void home(CommandSender sender) {
@@ -32,6 +34,12 @@ public class HomeCommand {
                 "there is nothing to show here, you can try \"/home /help\" to see the list of other commands");
     }
 
+    @Default
+    public static void home(Player player) {
+        InventoryMenu myInventory = new InventoryMenu(getPlugin(HomeSystemPlugin.class), player);
+        player.openInventory(myInventory.getInventory());
+
+    }
 
     @Subcommand("help")
     public static void help(CommandSender sender){
@@ -44,11 +52,6 @@ public class HomeCommand {
         sender.sendPlainMessage("/home delete <name> - deletes the home with name");
     }
 
-
-    @Default
-    public static void home(Player sender) {
-        sender.sendPlainMessage("Opening the GUI, you may use \"/home help\" for details on other commands");
-    }
     @Subcommand("set")
     public static void setHome(Player player, @AStringArgument String name) {
         final var playerBlock = player.getLocation().getBlock();
@@ -56,24 +59,40 @@ public class HomeCommand {
         final PlayerHouse playerHouse = new PlayerHouse(name, player.getUniqueId(), StringUtils.generateLocationString(formattedLocation)
         );
 
-        player.sendPlainMessage("Saving your home: "+ name + "...");
         PlayerHouseDAO playerHouseDAO = new PlayerHouseDAO();
-        playerHouseDAO.savePlayerHouse(playerHouse).thenRun(()->{
-            player.sendPlainMessage("Your home location has been saved");
-        }).exceptionally(throwable -> {
+        player.sendPlainMessage("Saving your home: "+ name + "...");
+        playerHouseDAO.getPlayerHouses(player.getUniqueId(), false).thenAccept((playerHouses -> {
 
+            if (playerHouses.size() >= MAX_HOMES){
+                player.sendPlainMessage("You have exceeded your max quota of homes: "+ MAX_HOMES + ", and cannot create anymore");
+                return;
+            }
+
+            playerHouseDAO.savePlayerHouse(playerHouse).thenRun(()->{
+                player.sendPlainMessage("Your home location has been saved");
+            }).exceptionally(throwable -> {
+                ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
+
+                if (errorCode == ErrorCodes.CONSTRAINT_VIOLATION) {
+                    player.sendPlainMessage("Could not create home, you already have a home named: " + name);
+                } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
+                    player.sendPlainMessage("Oops... something unexpected happened while creating your home, please contact support!"
+                            + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
+                    throwable.printStackTrace();
+                }
+                return null;
+            });
+        })).exceptionally(throwable -> {
             ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
-
-            if (errorCode == ErrorCodes.CONSTRAINT_VIOLATION) {
-                player.sendPlainMessage("Could not create home, you already have a home named: " + name);
-            } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
+            if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
                 player.sendPlainMessage("Oops... something unexpected happened while creating your home, please contact support!"
                         + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
-
                 throwable.printStackTrace();
             }
             return null;
         });
+
+
     }
 
     @Subcommand("tp")
@@ -93,7 +112,7 @@ public class HomeCommand {
             if (errorCode == ErrorCodes.NOT_FOUND) {
                 player.sendPlainMessage("Could not teleport to: " + name + ", this home does not exist");
             } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendPlainMessage("Oops... something unexpected happened while creating your home, please contact support!"
+                player.sendPlainMessage("Oops... something unexpected happened while teleporting to your home, please contact support!"
                         + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
                 throwable.printStackTrace();
             }
@@ -113,7 +132,7 @@ public class HomeCommand {
             if (errorCode == ErrorCodes.NOT_FOUND) {
                 player.sendPlainMessage("Could not delete " + name + ", this home does not exist");
             } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendPlainMessage("Oops... something unexpected happened while creating your home, please contact support!"
+                player.sendPlainMessage("Oops... something unexpected happened while deleting your home, please contact support!"
                         + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
                 throwable.printStackTrace();
             }
@@ -121,5 +140,7 @@ public class HomeCommand {
 
         });
     }
+
+
 
 }
