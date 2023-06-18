@@ -3,6 +3,8 @@ package com.ismail.homesystem.api.mysql.models;
 import com.ismail.homesystem.api.mysql.models.compositekeys.PlayerHouseCompositeKey;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @IdClass(PlayerHouseCompositeKey.class)
 public class PlayerHouse {
@@ -10,11 +12,11 @@ public class PlayerHouse {
     private String homeName;
 
     @Id
-    private String playerUUID;
+    private UUID playerUUID;
     private String coordinates;
 
 
-    public PlayerHouse(String homeName, String playerUUID, String coordinates) {
+    public PlayerHouse(String homeName, UUID playerUUID, String coordinates) {
         this.homeName = homeName;
         this.playerUUID = playerUUID;
         this.coordinates = coordinates;
@@ -25,10 +27,10 @@ public class PlayerHouse {
 
     @Override
     public String toString() {
-        return "PlayerHouse [playerId=" + playerUUID + ", coordinates=" + coordinates;
+        return "PlayerHouse [playerId=" + playerUUID.toString() + ", coordinates=" + coordinates;
     }
 
-    public String getPlayerUUID() {
+    public UUID getPlayerUUID() {
         return playerUUID;
     }
 
@@ -40,7 +42,7 @@ public class PlayerHouse {
         return homeName;
     }
 
-    public void setPlayerUUID(String playerId) {
+    public void setPlayerUUID(UUID playerId) {
         this.playerUUID = playerId;
     }
 
@@ -51,4 +53,5 @@ public class PlayerHouse {
     public void setHomeName(String homeName) {
         this.homeName = homeName;
     }
+
 }

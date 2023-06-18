@@ -2,14 +2,15 @@ package com.ismail.homesystem.api.mysql.models.compositekeys;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class PlayerHouseCompositeKey implements Serializable {
     protected String homeName;
-    protected String playerUUID;
+    protected UUID playerUUID;
 
     public PlayerHouseCompositeKey() {}
 
-    public PlayerHouseCompositeKey(String homeName, String playerUUID) {
+    public PlayerHouseCompositeKey(String homeName, UUID playerUUID) {
         this.homeName = homeName;
         this.playerUUID = playerUUID;
     }
