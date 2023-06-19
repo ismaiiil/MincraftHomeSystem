@@ -9,7 +9,6 @@ import com.ismail.homesystem.spigot.commands.HomeCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ismail.homesystem.spigot.language.TranslationManager.translateComponent;
+import static com.ismail.homesystem.spigot.language.TranslationManager.renderComponent;
 import static org.bukkit.Bukkit.getWorld;
 import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 
@@ -70,7 +69,7 @@ public class InventoryMenu implements  InventoryHolder {
     public InventoryMenu(HomeSystemPlugin plugin, Player player) {
 
         TranslatableComponent inventoryTextComponent = Component.translatable("home.gui.title").color(NamedTextColor.DARK_GREEN);
-        this.inventory = plugin.getServer().createInventory(this, 54,translateComponent(inventoryTextComponent,player));
+        this.inventory = plugin.getServer().createInventory(this, 54, renderComponent(inventoryTextComponent,player));
 
         ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemStack redStoneBlock = new ItemStack(Material.REDSTONE_BLOCK);
@@ -91,7 +90,7 @@ public class InventoryMenu implements  InventoryHolder {
         //the other player would have a translated item that isn't theirs, in any case this doesn't really apply here
         //which is why this is a note-to-self for future ref
         TranslatableComponent deleteTextComponent = Component.translatable("home.gui.delete_button").color(NamedTextColor.RED);
-        redstoneMeta.displayName(translateComponent(deleteTextComponent,player));
+        redstoneMeta.displayName(renderComponent(deleteTextComponent,player));
         redStoneBlock.setItemMeta(redstoneMeta);
 
         inventory.setItem(49, redStoneBlock);
@@ -116,7 +115,7 @@ public class InventoryMenu implements  InventoryHolder {
                 mapItem.setItemMeta(mapItemMeta);
 
                 ArrayList<Component> mapTexts = new ArrayList<>();
-                mapTexts.add(translateComponent(mapTextDescription,player));
+                mapTexts.add(renderComponent(mapTextDescription,player));
                 mapItem.lore(mapTexts);
                 inventory.setItem(i, mapItem);
             }

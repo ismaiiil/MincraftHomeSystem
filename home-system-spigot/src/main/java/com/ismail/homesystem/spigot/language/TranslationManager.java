@@ -2,6 +2,7 @@ package com.ismail.homesystem.spigot.language;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -60,7 +61,20 @@ public class TranslationManager {
         }
         return null;
     }
-    public static Component translateComponent(TranslatableComponent translatableComponent, Player player){
-        return GlobalTranslator.render(translatableComponent, player.locale());
+//    public static Component renderComponent(TranslatableComponent translatableComponent, Player player, String... placeholders){
+//        return GlobalTranslator.render(translatableComponent, player.locale());
+//    }
+
+
+    public static Component renderComponent(TranslatableComponent translatableComponent, Player player, String... placeholders){
+        Component component =  GlobalTranslator.render(translatableComponent, player.locale());
+        return component.replaceText(builder -> {
+            for (int i = 0; i < placeholders.length; i++) {
+                String placeholder = "{" + (i + 1) + "}";
+                builder.matchLiteral(placeholder).replacement(placeholders[i]);
+            }
+        });
     }
+
+
 }
