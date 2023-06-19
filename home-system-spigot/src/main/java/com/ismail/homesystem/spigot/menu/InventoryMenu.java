@@ -71,6 +71,9 @@ public class InventoryMenu implements  InventoryHolder {
         TranslatableComponent inventoryTextComponent = Component.translatable("home.gui.title").color(NamedTextColor.DARK_GREEN);
         this.inventory = plugin.getServer().createInventory(this, 54, renderComponent(inventoryTextComponent,player));
 
+        TranslatableComponent test = Component.translatable("home.delete.contact_support").color(NamedTextColor.DARK_GREEN);
+        player.sendMessage( renderComponent(test,player,"test"));
+
         ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemStack redStoneBlock = new ItemStack(Material.REDSTONE_BLOCK);
 
