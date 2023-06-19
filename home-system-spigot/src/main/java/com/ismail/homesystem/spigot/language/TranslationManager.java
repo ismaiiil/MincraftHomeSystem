@@ -28,13 +28,13 @@ public class TranslationManager {
         globalTranslator = GlobalTranslator.translator();
         ResourceBundle bundle;
         if (locale.equals(Locale.ENGLISH)) {
-            bundle = loadResourceBundle("message");
+            bundle = loadResourceBundle("messages_en_US");
         }
         else if (locale.equals(Locale.FRANCE)) {
-            bundle = loadResourceBundle("message_fr_FR");
+            bundle = loadResourceBundle("messages_fr_FR");
         } else {
             logger.severe("Default locale loaded as the one specified doesn't exist in the resources");
-            bundle = loadResourceBundle("message");
+            bundle = loadResourceBundle("messages_en_US");
         }
 
         if (bundle != null) {

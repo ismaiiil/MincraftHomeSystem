@@ -71,17 +71,12 @@ public class InventoryMenu implements InventoryHolder {
 
     public InventoryMenu(HomeSystemPlugin plugin, Player player) {
 
-        TranslatableComponent inventoryTextComponent = Component.translatable("home.gui.title").color(NamedTextColor.DARK_GREEN);
-        this.inventory = plugin.getServer().createInventory(this, 54, GlobalTranslator.render(inventoryTextComponent, player.locale()));
 
-//        TranslatableComponent test = Component.translatable("home.delete.contact_support").color(NamedTextColor.DARK_GREEN);
-//        player.sendMessage( renderComponent(test,player,"test"));
+        this.inventory = plugin.getServer().createInventory(this, 54,
+            getTranslatedComponent("home.gui.title",player).color(NamedTextColor.GREEN));
 
         ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemStack redStoneBlock = new ItemStack(Material.REDSTONE_BLOCK);
-
-//        this.inventory = plugin.getServer().createInventory(this, 54,
-//                getTranslatedComponent("home.gui.title",player));
 
         ItemMeta glassPaneMeta = glassPane.getItemMeta();
         glassPaneMeta.displayName(Component.empty());
@@ -91,13 +86,13 @@ public class InventoryMenu implements InventoryHolder {
             inventory.setItem(i, glassPane);
         }
 
-        ItemMeta redstoneMeta = redStoneBlock.getItemMeta();
         //PaperMc recommends doing translation client-side using a resource pack instead of using a translatable component
         //TranslatableComponent
         //https://github.com/PaperMC/Paper/issues/5377#issuecomment-801252654
         //had to render the component, but this means that the item cannot be transferred to another player
         //the other player would have a translated item that isn't theirs, in any case this doesn't really apply here
         //which is why this is a note-to-self for future ref
+        ItemMeta redstoneMeta = redStoneBlock.getItemMeta();
         redstoneMeta.displayName(getTranslatedComponent("home.gui.delete_button",player).color(NamedTextColor.RED));
         redStoneBlock.setItemMeta(redstoneMeta);
 
