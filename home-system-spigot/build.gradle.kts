@@ -26,6 +26,7 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-shade:9.0.3");
     compileOnly("dev.jorel:commandapi-annotations:9.0.3")
     annotationProcessor("dev.jorel:commandapi-annotations:9.0.3")
+    implementation("commons-io:commons-io:2.13.0")
 //    implementation("de.tr7zw:item-nbt-api:2.11.2");
 }
 

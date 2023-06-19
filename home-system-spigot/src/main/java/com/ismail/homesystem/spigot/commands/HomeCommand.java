@@ -8,6 +8,7 @@ import com.ismail.homesystem.spigot.HomeSystemPlugin;
 import com.ismail.homesystem.spigot.menu.InventoryMenu;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
+import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 import net.kyori.adventure.text.Component;
@@ -38,7 +39,6 @@ public class HomeCommand {
     public static void home(Player player) {
         InventoryMenu myInventory = new InventoryMenu(getPlugin(HomeSystemPlugin.class), player);
         player.openInventory(myInventory.getInventory());
-
     }
 
     @Subcommand("help")
@@ -124,6 +124,7 @@ public class HomeCommand {
     @Subcommand("delete")
     public static void delete(Player player, @AStringArgument String name) {
         PlayerHouseDAO playerHouseDAO = new PlayerHouseDAO();
+
         player.sendPlainMessage("Deleting home: " + name);
         playerHouseDAO.findByID(player.getUniqueId(), name, true).thenRun(()->{
             player.sendPlainMessage(name + " has been deleted");

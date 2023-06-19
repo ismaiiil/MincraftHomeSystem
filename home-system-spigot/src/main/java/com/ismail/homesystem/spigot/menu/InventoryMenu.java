@@ -7,7 +7,9 @@ import com.ismail.homesystem.common.StringUtils;
 import com.ismail.homesystem.spigot.HomeSystemPlugin;
 import com.ismail.homesystem.spigot.commands.HomeCommand;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,10 +67,16 @@ public class InventoryMenu implements  InventoryHolder {
     }
 
     public InventoryMenu(HomeSystemPlugin plugin, Player player) {
-        Component inventoryTextComponent = Component.text("Your Homes" )
-        .color(NamedTextColor.DARK_GREEN);
+//        Component inventoryTextComponent = Component.text("Your Homes" )
+//        .color(NamedTextColor.DARK_GREEN);
 
-        this.inventory = plugin.getServer().createInventory(this, 54, inventoryTextComponent);
+        TranslatableComponent translatableComponent = Component.translatable("abc.myKey");
+
+        Component inventoryTextComponent = translatableComponent.color(NamedTextColor.DARK_GREEN);
+//          Component inventoryTextComponent = translatableComponent.asComponent().color(NamedTextColor.DARK_GREEN);
+
+
+        this.inventory = plugin.getServer().createInventory(this, 54, GlobalTranslator.render(inventoryTextComponent,player.locale()));
 
         ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemStack redStoneBlock = new ItemStack(Material.REDSTONE_BLOCK);
@@ -82,8 +90,16 @@ public class InventoryMenu implements  InventoryHolder {
         }
 
         ItemMeta redstoneMeta = redStoneBlock.getItemMeta();
-        redstoneMeta.displayName(Component.text("Delete all homes" )
-                   .color(NamedTextColor.RED));
+//        redstoneMeta.displayName(Component.text("Delete all homes" )
+//                   .color(NamedTextColor.RED));
+
+        //PaperMc recommends doing translation client-side using a resource pack instead of using a translatable component
+        //TranslatableComponent
+        //https://github.com/PaperMC/Paper/issues/5377#issuecomment-801252654
+        //had to render the component, but this means that the item cannot be transfered to another player
+        //the other player would have a translated item that isn't their's, in any case this doesn't really apply here
+        //which is why this is a note-to-self for future ref
+        redstoneMeta.displayName(GlobalTranslator.render(inventoryTextComponent,player.locale()));
         redStoneBlock.setItemMeta(redstoneMeta);
 
         inventory.setItem(49, redStoneBlock);
