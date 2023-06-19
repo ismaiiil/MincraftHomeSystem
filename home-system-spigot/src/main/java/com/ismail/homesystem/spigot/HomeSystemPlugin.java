@@ -5,18 +5,11 @@ import com.ismail.homesystem.spigot.language.TranslationManager;
 import com.ismail.homesystem.spigot.menu.InventoryMenuListener;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -62,7 +55,6 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
            - text localization
            - test clean jenkins deployment
          */
-
 
     }
 

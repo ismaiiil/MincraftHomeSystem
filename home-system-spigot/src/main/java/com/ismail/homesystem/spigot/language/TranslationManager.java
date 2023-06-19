@@ -2,15 +2,15 @@ package com.ismail.homesystem.spigot.language;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -62,8 +62,14 @@ public class TranslationManager {
         return null;
     }
 
-    public static Component renderComponent(TranslatableComponent translatableComponent, Player player, String... placeholders){
-        Component component =  GlobalTranslator.render(translatableComponent, player.locale());
+    public static Component getTranslatedComponent(String textResourceName, @Nullable Player player, String... placeholders){
+        Locale locale;
+        if (Objects.isNull(player)){
+            locale = Locale.ENGLISH;
+        }else {
+            locale = player.locale();
+        }
+        Component component =  GlobalTranslator.render(Component.translatable(textResourceName), locale);
         if (placeholders.length > 0){
             component = component.replaceText(builder -> {
                 for (int i = 0; i < placeholders.length; i++) {

@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 
 import java.util.logging.Logger;
 
+import static com.ismail.homesystem.spigot.language.TranslationManager.getTranslatedComponent;
 import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getWorld;
 import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
@@ -30,9 +31,7 @@ public class HomeCommand {
     static Logger logger = getLogger();
     @Default
     public static void home(CommandSender sender) {
-        sender.sendPlainMessage("This normally opens the GUI, " +
-                "but since this command \"/home\" was not ran from the minecraft client, " +
-                "there is nothing to show here, you can try \"/home /help\" to see the list of other commands");
+        sender.sendMessage(getTranslatedComponent("home.default.serversender",null));
     }
 
     @Default
@@ -40,16 +39,13 @@ public class HomeCommand {
         InventoryMenu myInventory = new InventoryMenu(getPlugin(HomeSystemPlugin.class), player);
         player.openInventory(myInventory.getInventory());
     }
-
     @Subcommand("help")
     public static void help(CommandSender sender){
-        sender.sendMessage(Component.text(String.format("------ %s help ------", "Home System" ))
-                .color(NamedTextColor.YELLOW));
-        sender.sendPlainMessage("/home - Shows all you homes in a GUI");
-        sender.sendPlainMessage("/home help - Show this help");
-        sender.sendPlainMessage("/home set <name> - creates a home at your current location with the name specifed");
-        sender.sendPlainMessage("/home tp <name> - teleports to the home with name");
-        sender.sendPlainMessage("/home delete <name> - deletes the home with name");
+        sender.sendMessage(getTranslatedComponent("home.help.text",null));
+    }
+    @Subcommand("help")
+    public static void help(Player player){
+        player.sendMessage(getTranslatedComponent("home.help.text",player).color(NamedTextColor.YELLOW));
     }
 
     @Subcommand("set")
