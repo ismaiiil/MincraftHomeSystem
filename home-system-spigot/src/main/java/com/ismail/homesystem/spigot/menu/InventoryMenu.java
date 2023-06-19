@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ismail.homesystem.spigot.language.TranslationManager.translateComponent;
 import static org.bukkit.Bukkit.getWorld;
 import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 
@@ -67,16 +68,9 @@ public class InventoryMenu implements  InventoryHolder {
     }
 
     public InventoryMenu(HomeSystemPlugin plugin, Player player) {
-//        Component inventoryTextComponent = Component.text("Your Homes" )
-//        .color(NamedTextColor.DARK_GREEN);
 
-        TranslatableComponent translatableComponent = Component.translatable("abc.myKey");
-
-        Component inventoryTextComponent = translatableComponent.color(NamedTextColor.DARK_GREEN);
-//          Component inventoryTextComponent = translatableComponent.asComponent().color(NamedTextColor.DARK_GREEN);
-
-
-        this.inventory = plugin.getServer().createInventory(this, 54, GlobalTranslator.render(inventoryTextComponent,player.locale()));
+        TranslatableComponent inventoryTextComponent = Component.translatable("home.gui.title").color(NamedTextColor.DARK_GREEN);
+        this.inventory = plugin.getServer().createInventory(this, 54,translateComponent(inventoryTextComponent,player));
 
         ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemStack redStoneBlock = new ItemStack(Material.REDSTONE_BLOCK);
@@ -90,16 +84,14 @@ public class InventoryMenu implements  InventoryHolder {
         }
 
         ItemMeta redstoneMeta = redStoneBlock.getItemMeta();
-//        redstoneMeta.displayName(Component.text("Delete all homes" )
-//                   .color(NamedTextColor.RED));
-
         //PaperMc recommends doing translation client-side using a resource pack instead of using a translatable component
         //TranslatableComponent
         //https://github.com/PaperMC/Paper/issues/5377#issuecomment-801252654
-        //had to render the component, but this means that the item cannot be transfered to another player
-        //the other player would have a translated item that isn't their's, in any case this doesn't really apply here
+        //had to render the component, but this means that the item cannot be transferred to another player
+        //the other player would have a translated item that isn't theirs, in any case this doesn't really apply here
         //which is why this is a note-to-self for future ref
-        redstoneMeta.displayName(GlobalTranslator.render(inventoryTextComponent,player.locale()));
+        TranslatableComponent deleteTextComponent = Component.translatable("home.gui.delete_button").color(NamedTextColor.RED);
+        redstoneMeta.displayName(translateComponent(deleteTextComponent,player));
         redStoneBlock.setItemMeta(redstoneMeta);
 
         inventory.setItem(49, redStoneBlock);
@@ -116,8 +108,7 @@ public class InventoryMenu implements  InventoryHolder {
             for (int i = 0; i < fetchedHouses; i++) {
                 Component mapTextName = Component.text(playerHouses.get(i).getHomeName())
                         .color(NamedTextColor.YELLOW);
-                Component mapTextDescription = Component.text("Click to teleport to this home")
-                        .color(NamedTextColor.GRAY);
+                TranslatableComponent mapTextDescription = Component.translatable("home.gui.teleport_text").color(NamedTextColor.GRAY);
 
                 ItemStack mapItem = new ItemStack(Material.MAP);
                 ItemMeta mapItemMeta = mapItem.getItemMeta();
@@ -125,7 +116,7 @@ public class InventoryMenu implements  InventoryHolder {
                 mapItem.setItemMeta(mapItemMeta);
 
                 ArrayList<Component> mapTexts = new ArrayList<>();
-                mapTexts.add(mapTextDescription);
+                mapTexts.add(translateComponent(mapTextDescription,player));
                 mapItem.lore(mapTexts);
                 inventory.setItem(i, mapItem);
             }
