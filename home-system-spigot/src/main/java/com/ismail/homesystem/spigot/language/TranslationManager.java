@@ -68,12 +68,15 @@ public class TranslationManager {
 
     public static Component renderComponent(TranslatableComponent translatableComponent, Player player, String... placeholders){
         Component component =  GlobalTranslator.render(translatableComponent, player.locale());
-        return component.replaceText(builder -> {
-            for (int i = 0; i < placeholders.length; i++) {
-                String placeholder = "{" + (i + 1) + "}";
-                builder.matchLiteral(placeholder).replacement(placeholders[i]);
-            }
-        });
+        if (placeholders.length > 0){
+            component = component.replaceText(builder -> {
+                for (int i = 0; i < placeholders.length; i++) {
+                    String placeholder = "{" + (i + 1) + "}";
+                    builder.matchLiteral(placeholder).replacement(placeholders[i]);
+                }
+            });
+        }
+        return component;
     }
 
 
