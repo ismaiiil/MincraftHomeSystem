@@ -32,6 +32,8 @@ public class TranslationManager {
         }
         else if (locale.equals(Locale.FRANCE)) {
             bundle = loadResourceBundle("messages_fr_FR");
+        }else if (locale.equals(Locale.GERMANY)) {
+            bundle = loadResourceBundle("messages_de_DE");
         } else {
             logger.severe("Default locale loaded as the one specified doesn't exist in the resources");
             bundle = loadResourceBundle("messages_en_US");

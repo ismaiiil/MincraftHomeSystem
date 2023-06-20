@@ -38,6 +38,7 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         TranslationManager translationManager = new TranslationManager();
         translationManager.loadTranslations(Locale.ENGLISH);
         translationManager.loadTranslations(Locale.FRANCE);
+        translationManager.loadTranslations(Locale.GERMANY);
 
     }
 
