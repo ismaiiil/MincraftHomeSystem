@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ismail.homesystem.spigot.commands.HomeCommand.MAX_HOMES;
+import static com.ismail.homesystem.spigot.commands.HomeCommand.sendGenericError;
 import static com.ismail.homesystem.spigot.language.TranslationManager.getTranslatedComponent;
 import static org.bukkit.Bukkit.getWorld;
 import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
@@ -49,7 +51,7 @@ public class InventoryMenu implements InventoryHolder {
     public void deleteAllHouses(Player player){
         PlayerHouseDAO playerHouseDAO = new PlayerHouseDAO();;
         playerHouseDAO.getPlayerHouses(player.getUniqueId(), true).thenRun(()->{
-            player.sendMessage(getTranslatedComponent("home.delete.success",player)
+            player.sendMessage(getTranslatedComponent("home.delete.success.all",player)
                     .color(NamedTextColor.GREEN));
             Bukkit.getScheduler().callSyncMethod(getPlugin(HomeSystemPlugin.class), ()->{
                 player.getInventory().close();
@@ -61,9 +63,7 @@ public class InventoryMenu implements InventoryHolder {
         }).exceptionally(throwable -> {
             ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
             if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendMessage(getTranslatedComponent("home.delete.fail",player,Integer.toString(Bukkit.getServer().getCurrentTick()))
-                        .color(NamedTextColor.RED));
-                throwable.printStackTrace();
+                sendGenericError(player,throwable);
             }
             return null;
         });
@@ -73,7 +73,7 @@ public class InventoryMenu implements InventoryHolder {
 
 
         this.inventory = plugin.getServer().createInventory(this, 54,
-            getTranslatedComponent("home.gui.title",player).color(NamedTextColor.GREEN));
+            getTranslatedComponent("home.gui.title",player).color(NamedTextColor.DARK_GREEN));
 
         ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemStack redStoneBlock = new ItemStack(Material.REDSTONE_BLOCK);
@@ -102,9 +102,9 @@ public class InventoryMenu implements InventoryHolder {
         playerHouseDAO.getPlayerHouses(player.getUniqueId(), false).thenAccept((playerHouses -> {
             playerHouseList = playerHouses;
             var fetchedHouses = playerHouses.size();
-            if (playerHouses.size() > HomeCommand.MAX_HOMES) {
-                fetchedHouses = HomeCommand.MAX_HOMES;
-                player.sendMessage(getTranslatedComponent("home.set.warning_max",player)
+            if (playerHouses.size() > MAX_HOMES) {
+                fetchedHouses = MAX_HOMES;
+                player.sendMessage(getTranslatedComponent("home.set.warning_max",player,Integer.toString(MAX_HOMES))
                         .color(NamedTextColor.YELLOW));
             }
 
@@ -125,9 +125,7 @@ public class InventoryMenu implements InventoryHolder {
         })).exceptionally(throwable -> {
             ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
             if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendMessage(getTranslatedComponent("home.teleport.fail",player,Integer.toString(Bukkit.getServer().getCurrentTick()))
-                        .color(NamedTextColor.RED));
-                throwable.printStackTrace();
+                sendGenericError(player,throwable);
             }
             return null;
         });
@@ -137,6 +135,7 @@ public class InventoryMenu implements InventoryHolder {
     public @NotNull Inventory getInventory() {
         return this.inventory;
     }
+
 
 
 }

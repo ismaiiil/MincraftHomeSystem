@@ -47,15 +47,6 @@ public class HomeSystemPlugin extends JavaPlugin implements Listener {
         //observed with player.locale() not being set
         //https://discord.com/channels/289587909051416579/555462289851940864/1070459148103323698
         //to observe locale changes use the events related to settings changes? not sure need to test
-
-//        ResourceBundle bundle = LocaleManager.getResourceBundle();
-        /*TODO
-           - code refactoring (moving string utils to common)
-           - permissions, has been set auto
-           - text localization
-           - test clean jenkins deployment
-         */
-
     }
 
     @Override

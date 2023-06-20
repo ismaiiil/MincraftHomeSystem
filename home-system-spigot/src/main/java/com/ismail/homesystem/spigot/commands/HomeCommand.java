@@ -8,10 +8,8 @@ import com.ismail.homesystem.spigot.HomeSystemPlugin;
 import com.ismail.homesystem.spigot.menu.InventoryMenu;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
-import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -56,34 +54,33 @@ public class HomeCommand {
         );
 
         PlayerHouseDAO playerHouseDAO = new PlayerHouseDAO();
-        player.sendPlainMessage("Saving your home: "+ name + "...");
+        player.sendMessage(getTranslatedComponent("home.set.saving",player, playerHouse.getHomeName()).color(NamedTextColor.YELLOW));
         playerHouseDAO.getPlayerHouses(player.getUniqueId(), false).thenAccept((playerHouses -> {
 
             if (playerHouses.size() >= MAX_HOMES){
-                player.sendPlainMessage("You have exceeded your max quota of homes: "+ MAX_HOMES + ", and cannot create anymore");
+                player.sendMessage(getTranslatedComponent("home.set.warning_max",player,Integer.toString(MAX_HOMES))
+                        .color(NamedTextColor.YELLOW));
                 return;
             }
 
             playerHouseDAO.savePlayerHouse(playerHouse).thenRun(()->{
-                player.sendPlainMessage("Your home location has been saved");
+                player.sendMessage(getTranslatedComponent("home.set.saved",player, playerHouse.getHomeName())
+                        .color(NamedTextColor.GREEN));
             }).exceptionally(throwable -> {
                 ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
 
                 if (errorCode == ErrorCodes.CONSTRAINT_VIOLATION) {
-                    player.sendPlainMessage("Could not create home, you already have a home named: " + name);
+                    player.sendMessage(getTranslatedComponent("home.set.conflict",player, playerHouse.getHomeName())
+                            .color(NamedTextColor.RED));
                 } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                    player.sendPlainMessage("Oops... something unexpected happened while creating your home, please contact support!"
-                            + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
-                    throwable.printStackTrace();
+                    sendGenericError(player, throwable);
                 }
                 return null;
             });
         })).exceptionally(throwable -> {
             ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
             if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendPlainMessage("Oops... something unexpected happened while creating your home, please contact support!"
-                        + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
-                throwable.printStackTrace();
+                sendGenericError(player, throwable);
             }
             return null;
         });
@@ -94,23 +91,24 @@ public class HomeCommand {
     @Subcommand("tp")
     public static void tp(Player player, @AStringArgument String name) {
         PlayerHouseDAO playerHouseDAO = new PlayerHouseDAO();
-        player.sendPlainMessage("You have chosen to teleport to: " + name);
+        player.sendMessage(getTranslatedComponent("home.teleport.loading",player,name)
+                .color(NamedTextColor.YELLOW));
         playerHouseDAO.findByID(player.getUniqueId(), name, false).thenAccept((playerHouse)->{
             var formattedLocation = StringUtils.parseString(playerHouse.getCoordinates());
             assert formattedLocation != null;
             Bukkit.getScheduler().callSyncMethod(getPlugin(HomeSystemPlugin.class), ()->{
                 player.teleport(new Location(getWorld(formattedLocation.world()), formattedLocation.x(),formattedLocation.y(),formattedLocation.z()));
-                player.sendPlainMessage("Teleported to " + name);
+                player.sendMessage(getTranslatedComponent("home.teleport.success",player,name)
+                        .color(NamedTextColor.GREEN));
                 return null;
             });
         }).exceptionally(throwable -> {
             ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
             if (errorCode == ErrorCodes.NOT_FOUND) {
-                player.sendPlainMessage("Could not teleport to: " + name + ", this home does not exist");
+                player.sendMessage(getTranslatedComponent("home.teleport.notfound",player,name)
+                        .color(NamedTextColor.RED));
             } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendPlainMessage("Oops... something unexpected happened while teleporting to your home, please contact support!"
-                        + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
-                throwable.printStackTrace();
+                sendGenericError(player, throwable);
             }
             return null;
         });
@@ -123,21 +121,26 @@ public class HomeCommand {
 
         player.sendPlainMessage("Deleting home: " + name);
         playerHouseDAO.findByID(player.getUniqueId(), name, true).thenRun(()->{
-            player.sendPlainMessage(name + " has been deleted");
+            player.sendMessage(getTranslatedComponent("home.delete.success.single",player,name)
+                    .color(NamedTextColor.DARK_GREEN));
         }).exceptionally(throwable -> {
             ErrorCodes errorCode = ErrorCodes.getErrorCode(throwable.getCause().getMessage());
             if (errorCode == ErrorCodes.NOT_FOUND) {
-                player.sendPlainMessage("Could not delete " + name + ", this home does not exist");
+                player.sendMessage(getTranslatedComponent("home.delete.notfound",player,name)
+                        .color(NamedTextColor.RED));
             } else if (errorCode == ErrorCodes.UNHANDLED_ERROR) {
-                player.sendPlainMessage("Oops... something unexpected happened while deleting your home, please contact support!"
-                        + "\n" + "Giving them this number might help: " + Bukkit.getServer().getCurrentTick());
-                throwable.printStackTrace();
+                sendGenericError(player, throwable);
             }
             return null;
 
         });
     }
 
+    public static void sendGenericError(Player player, Throwable throwable) {
+        player.sendMessage(getTranslatedComponent("home.generic.fail", player,Integer.toString(Bukkit.getServer().getCurrentTick()))
+                .color(NamedTextColor.RED));
+        throwable.printStackTrace();
+    }
 
 
 }
