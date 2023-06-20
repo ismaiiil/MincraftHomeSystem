@@ -3,11 +3,9 @@ package com.ismail.homesystem.common;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+
 public class StringUtils {
     public static FormattedLocation parseString(String input) {
-        // Define the pattern using regular expressions and capturing groups
         Pattern pattern = Pattern.compile("world:(.*?)x:(.*?)y:(.*?)z:(.*?)");
 
         // Match the pattern against the input string

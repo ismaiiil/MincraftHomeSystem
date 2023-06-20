@@ -16,8 +16,6 @@ public class InventoryMenuListener implements Listener {
     public void onMenuClick(final InventoryClickEvent event){
 
         Inventory inventory = event.getClickedInventory();
-        // Check if the holder is our MyInventory,
-        // if yes, use instanceof pattern matching to store it in a variable immediately.
         if (inventory == null || !(inventory.getHolder() instanceof InventoryMenu myInventoryMenu)) {
             return;
         }
@@ -36,10 +34,8 @@ public class InventoryMenuListener implements Listener {
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         Set<Integer> rawSlots = event.getRawSlots();
-        // Check if any of the dragged slots are not part of your custom inventory
         for (int slot : rawSlots) {
             if (isCustomInventorySlot(event.getView().getInventory(slot))) {
-                // Handle the event, e.g., cancel it
                 event.setCancelled(true);
                 return;
             }

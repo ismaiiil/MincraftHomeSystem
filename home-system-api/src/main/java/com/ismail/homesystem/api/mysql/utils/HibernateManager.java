@@ -13,8 +13,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-
-
 public class HibernateManager {
     public static String CONFIG_PATH = "config.json";
     private static SessionFactory sessionFactory;
